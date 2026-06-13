@@ -1,0 +1,134 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "show_title": true,
+        "page_width": "xs"
+      }
+    },
+    "collection_list_TXfzNc": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_7hG7YW": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "",
+            "title": "",
+            "button_text": "View products",
+            "button_link": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "button_background": "",
+            "button_text_color": ""
+          }
+        },
+        "collection_QXT7gq": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "",
+            "title": "",
+            "button_text": "View products",
+            "button_link": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "button_background": "",
+            "button_text_color": ""
+          }
+        },
+        "collection_Jqyy6Q": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "",
+            "title": "",
+            "button_text": "View products",
+            "button_link": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "button_background": "",
+            "button_text_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_7hG7YW",
+        "collection_QXT7gq",
+        "collection_Jqyy6Q"
+      ],
+      "settings": {
+        "separate_section_with_border": true,
+        "image_size": "auto",
+        "show_text_outside": false,
+        "space_items": true,
+        "stack_collections": true,
+        "collections_per_row_desktop": 3,
+        "subheading": "",
+        "title": "",
+        "content": "",
+        "circle_button_background": "#ffffff",
+        "circle_button_text_color": "#1c1c1c"
+      }
+    },
+    "before_after_QhDHzG": {
+      "type": "before-after",
+      "blocks": {
+        "before_Rit9XJ": {
+          "type": "before",
+          "settings": {
+            "text": "Before",
+            "link_text": "",
+            "link_url": "",
+            "link_style": "link",
+            "text_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_text_color": "#1c1c1c"
+          }
+        },
+        "after_8C3CVX": {
+          "type": "after",
+          "settings": {
+            "text": "After",
+            "link_text": "",
+            "link_url": "",
+            "link_style": "link",
+            "text_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_text_color": "#1c1c1c"
+          }
+        }
+      },
+      "block_order": [
+        "before_Rit9XJ",
+        "after_8C3CVX"
+      ],
+      "settings": {
+        "separate_section_with_border": true,
+        "subheading": "",
+        "title": "Before\/after",
+        "content": "<p>Showcase your product benefit by using before\/after image comparison.<\/p>",
+        "cursor_direction": "horizontal",
+        "cursor_initial_position": 50,
+        "cursor_background": "#ffffff",
+        "cursor_arrows_color": "#000000"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "collection_list_TXfzNc",
+    "before_after_QhDHzG"
+  ]
+}

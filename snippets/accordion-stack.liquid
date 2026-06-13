@@ -1,0 +1,139 @@
+{%- comment -%}
+Tabs para “Collapsible text” (accordion).
+Uso:
+- Debajo de la galería (por defecto):  {% render 'accordion-stack', section: section %}
+- Panel derecho (info):                {% render 'accordion-stack', section: section, scope: 'info' %}
+{%- endcomment -%}
+
+{%- assign stack_scope = scope | default: 'below' -%}
+{%- assign include_below = 1 -%}
+{%- if stack_scope == 'info' -%}{%- assign include_below = 0 -%}{%- endif -%}
+
+{%- capture _has_any -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'accordion' -%}
+      {%- if include_below == 1 -%}
+        {%- if block.settings.show_below_gallery -%}
+          {%- assign _t = block.settings.title | default: block.settings.page.title -%}
+          {%- assign _c = block.settings.page.content | default: block.settings.content -%}
+          {%- if _t != blank and _c != blank -%}x{%- break -%}{%- endif -%}
+        {%- endif -%}
+      {%- else -%}
+        {%- if block.settings.show_below_gallery == false -%}
+          {%- assign _t = block.settings.title | default: block.settings.page.title -%}
+          {%- assign _c = block.settings.page.content | default: block.settings.content -%}
+          {%- if _t != blank and _c != blank -%}x{%- break -%}{%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if _has_any contains 'x' -%}
+<div class="product-accordion-stack" data-acc-stack>
+  <div class="product-accordion-stack__tabs" role="tablist" aria-label="Product info">
+    {%- assign idx = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'accordion' -%}
+        {%- if include_below == 1 -%}
+          {%- if block.settings.show_below_gallery -%}
+            {%- assign title = block.settings.title | default: block.settings.page.title -%}
+            {%- assign content = block.settings.page.content | default: block.settings.content -%}
+            {%- if title != blank and content != blank -%}
+              {%- assign idx = idx | plus: 1 -%}
+              <button role="tab" type="button"
+                id="acc-tab-{{ section.id }}-{{ idx }}"
+                class="product-accordion-stack__tab"
+                aria-controls="acc-panel-{{ section.id }}-{{ idx }}"
+                aria-selected="{% if idx == 1 %}true{% else %}false{% endif %}"
+                {{ block.shopify_attributes }}
+              >{{- title -}}</button>
+            {%- endif -%}
+          {%- endif -%}
+        {%- else -%}
+          {%- if block.settings.show_below_gallery == false -%}
+            {%- assign title = block.settings.title | default: block.settings.page.title -%}
+            {%- assign content = block.settings.page.content | default: block.settings.content -%}
+            {%- if title != blank and content != blank -%}
+              {%- assign idx = idx | plus: 1 -%}
+              <button role="tab" type="button"
+                id="acc-tab-{{ section.id }}-{{ idx }}"
+                class="product-accordion-stack__tab"
+                aria-controls="acc-panel-{{ section.id }}-{{ idx }}"
+                aria-selected="{% if idx == 1 %}true{% else %}false{% endif %}"
+                {{ block.shopify_attributes }}
+              >{{- title -}}</button>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="product-accordion-stack__panels">
+    {%- assign idx = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'accordion' -%}
+        {%- if include_below == 1 -%}
+          {%- if block.settings.show_below_gallery -%}
+            {%- assign title = block.settings.title | default: block.settings.page.title -%}
+            {%- assign content = block.settings.page.content | default: block.settings.content -%}
+            {%- if title != blank and content != blank -%}
+              {%- assign idx = idx | plus: 1 -%}
+              <div role="tabpanel"
+                   id="acc-panel-{{ section.id }}-{{ idx }}"
+                   class="product-accordion-stack__panel"
+                   aria-labelledby="acc-tab-{{ section.id }}-{{ idx }}"
+                   {% if idx != 1 %}hidden{% endif %}>
+                <div class="prose">{{ content }}</div>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- else -%}
+          {%- if block.settings.show_below_gallery == false -%}
+            {%- assign title = block.settings.title | default: block.settings.page.title -%}
+            {%- assign content = block.settings.page.content | default: block.settings.content -%}
+            {%- if title != blank and content != blank -%}
+              {%- assign idx = idx | plus: 1 -%}
+              <div role="tabpanel"
+                   id="acc-panel-{{ section.id }}-{{ idx }}"
+                   class="product-accordion-stack__panel"
+                   aria-labelledby="acc-tab-{{ section.id }}-{{ idx }}"
+                   {% if idx != 1 %}hidden{% endif %}>
+                <div class="prose">{{ content }}</div>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+<style>
+#shopify-section-{{ section.id }} .product-accordion-stack__tabs {
+  display:flex; gap:1rem; flex-wrap:wrap; border-bottom:1px solid rgb(var(--border-color));
+}
+#shopify-section-{{ section.id }} .product-accordion-stack__tab {
+  appearance:none; background:transparent; border:0; padding:.75rem 0; cursor:pointer; font:inherit; line-height:1.2; position:relative;
+}
+#shopify-section-{{ section.id }} .product-accordion-stack__tab[aria-selected="true"] { font-weight:600; }
+#shopify-section-{{ section.id }} .product-accordion-stack__tab[aria-selected="true"]::after {
+  content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:currentColor;
+}
+#shopify-section-{{ section.id }} .product-accordion-stack__panel { padding-top:1rem; }
+</style>
+
+<script>
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('.product-accordion-stack__tab'); if(!btn) return;
+  const wrap = btn.closest('.product-accordion-stack'); if(!wrap) return;
+  wrap.querySelectorAll('[role="tab"]').forEach(t=>t.setAttribute('aria-selected','false'));
+  btn.setAttribute('aria-selected','true');
+  const targetId = btn.getAttribute('aria-controls');
+  wrap.querySelectorAll('[role="tabpanel"]').forEach(p=>p.hidden = true);
+  const panel = wrap.querySelector('#'+CSS.escape(targetId));
+  if(panel) panel.hidden = false;
+},{passive:true});
+</script>
+{%- endif -%}

@@ -1,0 +1,56 @@
+{% if template contains 'product' %}
+  <nav class="breadcrumb" role="navigation" id="breadcrumb-container" style="display: none;" aria-label="breadcrumbs">
+    <div class="breadcrumb-fade">
+      <span>
+        <a href="/">
+          Inicio
+        </a>
+      </span>
+      <span aria-hidden="true" class="breadcrumb-separator Second-Font"> &gt; </span>
+      <span id="collection-breadcrumb"></span>
+      <span class="Second-Font breadcrumb-current">{{ product.title }}</span>
+    </div>
+  </nav>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const lastVisitedBreadcrumbTrail = sessionStorage.getItem('last_visited_breadcrumb_trail');
+      const breadcrumbContainer = document.getElementById('breadcrumb-container');
+      const collectionBreadcrumb = document.getElementById('collection-breadcrumb');
+      const productTitleElement = breadcrumbContainer.querySelector('.breadcrumb-current');
+
+      if (lastVisitedBreadcrumbTrail) {
+        const breadcrumbArray = lastVisitedBreadcrumbTrail.split('||');
+        let breadcrumbHTML = '';
+        for (let i = 0; i < breadcrumbArray.length; i++) {
+          const part = breadcrumbArray[i].trim();
+          if (part !== '') {
+            const [label, url] = part.split('|');
+
+            let finalLabel = label;
+            if (i === 0 && label.length > 4) {
+              finalLabel = '...' + label.slice(-4);
+            }
+
+            if (i > 0) {
+              breadcrumbHTML += '<span aria-hidden="true" class="breadcrumb-separator Second-Font"> &gt; </span>';
+            }
+
+            breadcrumbHTML += '<a href="' + url + '" class="breadcrumb-link">' + finalLabel + '</a>';
+          }
+        }
+        collectionBreadcrumb.innerHTML = breadcrumbHTML;
+
+        const separator = document.createElement('span');
+        separator.setAttribute('aria-hidden', 'true');
+        separator.className = 'breadcrumb-separator Second-Font';
+        separator.innerHTML = ' &gt; ';
+        productTitleElement.parentNode.insertBefore(separator, productTitleElement);
+      }
+
+      // if (window.innerWidth > 641) {
+        breadcrumbContainer.style.display = 'block';
+      // }
+    });
+  </script>
+{% endif %}

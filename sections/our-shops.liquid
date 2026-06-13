@@ -1,0 +1,191 @@
+<div class="our-shops-section">
+  <div class="our-shops-wrapper">
+    {% if section.settings.title != blank %}
+      <h2 class="our-shops__title">{{ section.settings.title | escape }}</h2>
+    {% endif %}
+    {% if section.settings.text != blank %}
+      <div class="our-shops__intro rte">{{ section.settings.text }}</div>
+    {% endif %}
+
+    <div class="our-shops__list" role="list" aria-label="Our shops">
+      {% for block in section.blocks %}
+        <article class="our-shops__item" role="listitem" {{ block.shopify_attributes }}>
+          {% if block.settings.image %}
+            {% assign alt_text = block.settings.title | default: 'Shop image' | escape %}
+            {{ block.settings.image
+              | image_url: width: 1200
+              | image_tag: alt: alt_text, class: 'our-shops__image', loading: 'lazy', sizes: '(min-width: 1200px) 25vw, 50vw'
+            }}
+          {% endif %}
+
+          <div class="our-shops__content">
+            {% if block.settings.title != blank %}
+              <h3 class="our-shops__item-title">{{ block.settings.title | escape }}</h3>
+            {% endif %}
+            {% if block.settings.text != blank %}
+              <div class="our-shops__item-text rte">
+                {{ block.settings.text }}
+              </div>
+            {% endif %}
+            {% if block.settings.url != blank %}
+              <a class="our-shops__link" href="{{ block.settings.url }}">{{ block.settings.button_text }}</a>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .our-shops-section {
+    padding: 32px 0;
+    margin-top: 150px;
+  }
+
+  .our-shops-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .our-shops__title {
+    margin: 0 0 20px;
+    font-size: 30px;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .our-shops__intro {
+    margin: 0 auto 40px;
+    text-align: center;
+    font-size: 16px;
+    max-width: 800px;
+    color: #494948;
+  }
+
+  .our-shops__list {
+    --gap: 20px;
+    display: flex;
+    gap: var(--gap);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  .our-shops__list::-webkit-scrollbar {
+    height: 8px;
+  }
+  .our-shops__list::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,.2);
+    border-radius: 4px;
+  }
+
+  .our-shops__item {
+    flex: 0 0 calc((100% - (3 * var(--gap))) / 4);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .our-shops__image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .our-shops__content {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+    background: #F6F1F1;
+    border-radius: 0 0 8px 8px;
+    text-align: center;
+  }
+
+  .our-shops__item-text {
+    margin: 0;
+  }
+
+  .our-shops__link {
+    margin-top: 4px;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 1024px) {
+    .our-shops__item {
+      flex-basis: calc((100% - (2 * var(--gap))) / 3);
+    }
+  }
+  @media (max-width: 680px) {
+    .our-shops__item {
+      flex-basis: calc((100% - (1 * var(--gap))) / 2);
+    }
+  }
+</style>
+
+
+{% schema %}
+{
+  "name": "Our shops",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Texto de ejemplo"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Shop text</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shop",
+      "name": "Shop",
+      "settings": [
+        {
+          "type": "image_picker",
+          "label": "Image",
+          "id": "image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Shop title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Shop text",
+          "default": "<p>Shop text</p>"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Url"
+        },
+        {
+          "type": "text",
+          "label": "Button text",
+          "id": "button_text",
+          "default": "Button text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our Shops"
+    }
+  ]
+}
+{% endschema %}

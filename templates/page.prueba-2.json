@@ -1,0 +1,137 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "show_title": true,
+        "page_width": "xs"
+      }
+    },
+    "collection_list_tip8B9": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_C4VDjj": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "",
+            "title": "",
+            "button_text": "View products",
+            "button_link": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "button_background": "",
+            "button_text_color": ""
+          }
+        },
+        "collection_N7FqBj": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "",
+            "title": "",
+            "button_text": "View products",
+            "button_link": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "button_background": "",
+            "button_text_color": ""
+          }
+        },
+        "collection_kwhg4L": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "expand_collection": false,
+            "content_position": "place-self-end-start text-start",
+            "subheading": "",
+            "title": "",
+            "button_text": "View products",
+            "button_link": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "button_background": "",
+            "button_text_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_C4VDjj",
+        "collection_N7FqBj",
+        "collection_kwhg4L"
+      ],
+      "name": "t:sections.collection_list.presets.collection_list.name",
+      "settings": {
+        "separate_section_with_border": true,
+        "image_size": "auto",
+        "show_text_outside": false,
+        "space_items": true,
+        "stack_collections": true,
+        "collections_per_row_desktop": 3,
+        "subheading": "",
+        "title": "",
+        "content": "",
+        "circle_button_background": "#ffffff",
+        "circle_button_text_color": "#1c1c1c"
+      }
+    },
+    "image_with_text_tqjjiF": {
+      "type": "image-with-text",
+      "blocks": {
+        "subheading_VwCKfC": {
+          "type": "subheading",
+          "settings": {
+            "text": "Subheading"
+          }
+        },
+        "heading_9wCW4c": {
+          "type": "heading",
+          "settings": {
+            "text": "Image with text",
+            "heading_tag": "h1"
+          }
+        },
+        "richtext_pRy6hH": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "subheading_VwCKfC",
+        "heading_9wCW4c",
+        "richtext_pRy6hH"
+      ],
+      "name": "t:sections.image_with_text.presets.image_with_text.name",
+      "settings": {
+        "separate_section_with_border": true,
+        "reveal_on_scroll": true,
+        "image_position": "start",
+        "content_width": "sm",
+        "remove_vertical_spacing": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "collection_list_tip8B9",
+    "image_with_text_tqjjiF"
+  ]
+}

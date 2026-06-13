@@ -1,0 +1,395 @@
+<custom-header
+  id="site-header"
+  data-drawer-width-mobile="360"
+  data-drawer-width-desktop="420"
+  data-overlay-blur="8"
+  data-overlay-opacity="0.28"
+  data-z="9999"
+  class="header"
+>
+  {%- comment -%} Hamburguesa (se muestra siempre) {%- endcomment -%}
+  <button slot="hamburger" type="button" class="ch-iconbtn" aria-label="{{ 'header.general.open_menu' | t }}">
+    {%- render 'icon' with 'hamburger', class: 'header__nav-icon' -%}
+  </button>
+
+  {%- comment -%} Logo centrado (reutilizamos tu capture) {%- endcomment -%}
+  {%- capture logo_content -%}
+    {%- if section.settings.logo -%}
+      {%- capture sizes -%}{{ section.settings.logo_max_width }}px{%- endcapture -%}
+      {%- capture widths -%}{{ section.settings.logo_max_width | times: 2 | at_most: section.settings.logo.width }}, {{ section.settings.logo_max_width | times: 3 | at_most: section.settings.logo.width }}{%- endcapture -%}
+      <span class="sr-only">{{ shop.name }}</span>
+      {{- section.settings.logo | image_url: width: section.settings.logo.width | image_tag: sizes: sizes, widths: widths, class: 'header__logo-image' -}}
+      {%- if section.settings.transparent_logo -%}
+        {{- section.settings.transparent_logo | image_url: width: section.settings.transparent_logo.width | image_tag: sizes: sizes, widths: widths, class: 'header__logo-image header__logo-image--transparent' -}}
+      {%- endif -%}
+    {%- else -%}
+      <span class="header__logo-text h5">{{ shop.name }}</span>
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- if request.page_type == 'index' -%}
+    <h1 slot="logo" class="header__logo"><a href="{{ routes.root_url }}">{{ logo_content }}</a></h1>
+  {%- else -%}
+    <a slot="logo" href="{{ routes.root_url }}" class="header__logo">{{ logo_content }}</a>
+  {%- endif -%}
+
+  {%- comment -%} Utilidades a la derecha {%- endcomment -%}
+  <div slot="utils" class="ch-utils">
+    {%- liquid
+      if section.settings.show_country_selector and localization.available_countries.size > 1
+        assign show_country_selector = true
+      endif
+      if section.settings.show_locale_selector and localization.available_languages.size > 1
+        assign show_locale_selector = true
+      endif
+    -%}
+
+    {%- if show_country_selector or show_locale_selector -%}
+      <div class="localization-selectors">
+        {%- if show_country_selector -%}
+          {%- render 'localization-selector', type: 'country', placement: 'bottom-end', show_country_name: section.settings.show_country_name, show_country_flag: section.settings.show_country_flag, id_prefix: 'header-nav' -%}
+        {%- endif -%}
+        {%- if show_locale_selector -%}
+          {%- render 'localization-selector', type: 'locale', placement: 'bottom-end', id_prefix: 'header-nav' -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if shop.customer_accounts_enabled -%}
+      <a href="{{ routes.account_url }}" class="ch-iconbtn" aria-label="{{ 'header.general.open_account' | t }}">
+        {%- render 'icon' with 'account', class: 'header__nav-icon' -%}
+      </a>
+    {%- endif -%}
+
+    {%- if section.settings.enable_search -%}
+      <a href="{{ routes.search_url }}" class="ch-iconbtn" aria-label="{{ 'header.general.open_search' | t }}">
+        {%- render 'icon' with 'search', class: 'header__nav-icon' -%}
+      </a>
+    {%- endif -%}
+
+    <a href="{{ routes.cart_url }}" class="ch-iconbtn relative"
+       {% if settings.cart_type != 'page' and request.page_type != 'cart' %}aria-controls="cart-drawer"{% endif %}
+       aria-label="{{ 'header.general.open_cart' | t }}">
+      {%- render 'icon' with 'cart', class: 'header__nav-icon' -%}
+      <cart-dot class="header__cart-dot {% unless cart.empty? %}is-visible{% endunless %}"></cart-dot>
+    </a>
+  </div>
+
+  {%- comment -%}
+    CONTENIDO DEL MENÚ LATERAL (drawer).
+    Puedes cambiarlo por tu 'sidebar_menu' o 'menu' principal.
+  {%- endcomment -%}
+  <nav slot="menu" aria-label="{{ 'header.general.primary_navigation' | t | escape }}">
+    {%- assign sidebar_menu = section.settings.sidebar_menu | default: section.settings.menu -%}
+    {% if sidebar_menu.links.size > 0 %}
+      <ul class="ch-menu unstyled-list" role="list">
+        {% for link in sidebar_menu.links %}
+          <li class="ch-menu-item">
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <hr class="ch-divider">
+      <ul class="ch-secondary unstyled-list" role="list">
+        {% if shop.customer_accounts_enabled %}<li><a href="{{ routes.account_url }}">{{ 'header.general.account' | t }}</a></li>{% endif %}
+        <li><a href="{{ routes.search_url }}">{{ 'header.general.search' | t }}</a></li>
+        <li><a href="{{ routes.cart_url }}">{{ 'header.general.cart' | t }} (<cart-count>{{ cart.item_count }}</cart-count>)</a></li>
+      </ul>
+    {% endif %}
+  </nav>
+</custom-header>
+
+
+{% schema %}
+{
+  "name": "Custom header",
+  "class": "shopify-section--header",
+  "tag": "header",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "t:sections.header.enable_sticky_header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_separation_border",
+      "label": "t:sections.header.show_separation_border",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "reduce_padding",
+      "label": "t:sections.header.reduce_padding",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.logo_category"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:global.image.image",
+      "info": "t:sections.header.logo_size_recommendation"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 20,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "label": "t:global.image.width",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "logo_mobile_max_width",
+      "min": 20,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "t:global.image.mobile_width",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.navigation_category"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:sections.header.menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "sidebar_menu",
+      "label": "t:sections.header.mobile_menu"
+    },
+    {
+      "type": "select",
+      "id": "menu_open_trigger",
+      "label": "t:sections.header.menu_open_trigger",
+      "info": "t:sections.header.menu_open_trigger_info",
+      "options": [
+        {
+          "value": "hover",
+          "label": "t:sections.header.menu_open_trigger_options.hover"
+        },
+        {
+          "value": "click",
+          "label": "t:sections.header.menu_open_trigger_options.click"
+        }
+      ],
+      "default": "hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "label": "t:sections.header.enable_search",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.sidebar_navigation_category"
+    },
+    {
+      "type": "select",
+      "id": "sidebar_text_font",
+      "label": "t:sections.header.sidebar_text_font",
+      "options": [
+        {
+          "value": "heading",
+          "label": "t:sections.header.sidebar_text_font_options.heading"
+        },
+        {
+          "value": "body",
+          "label": "t:sections.header.sidebar_text_font_options.body"
+        }
+      ],
+      "default": "heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "sidebar_show_dividers",
+      "label": "t:sections.header.sidebar_show_dividers",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.desktop_category"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.header.layout",
+      "options": [
+        {
+          "value": "logo_left_navigation_inline",
+          "label": "t:sections.header.layout_options.logo_left_navigation_inline"
+        },
+        {
+          "value": "logo_left_navigation_center",
+          "label": "t:sections.header.layout_options.logo_left_navigation_center"
+        },
+        {
+          "value": "logo_center_navigation_inline",
+          "label": "t:sections.header.layout_options.logo_center_navigation_inline"
+        },
+        {
+          "value": "logo_center_navigation_below",
+          "label": "t:sections.header.layout_options.logo_center_navigation_below"
+        },
+        {
+          "value": "drawer",
+          "label": "t:sections.header.layout_options.drawer"
+        }
+      ],
+      "default": "logo_left_navigation_inline"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icons",
+      "label": "t:sections.header.show_icons",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:global.localization.country_region_selector_category",
+      "info": "t:global.localization.country_region_selector_category_info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_selector",
+      "label": "t:global.localization.show_country_region_selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_name",
+      "label": "t:global.localization.show_country_name",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_flag",
+      "label": "t:global.localization.show_country_flag",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:global.localization.language_selector_category",
+      "info": "t:global.localization.language_selector_category_info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_locale_selector",
+      "label": "t:global.localization.show_locale_selector",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.transparent_header_category"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.header.transparent_header_info"
+    },
+    {
+      "type": "color",
+      "id": "transparent_header_text_color",
+      "label": "t:global.colors.text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "transparent_logo",
+      "label": "t:sections.header.transparent_header_logo_image",
+      "info": "t:sections.header.transparent_header_logo_size_recommendation"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu",
+      "name": "t:sections.header.blocks.mega_menu.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "t:sections.header.blocks.mega_menu.menu_item",
+          "info": "t:sections.header.blocks.mega_menu.menu_item_info"
+        },
+        {
+          "type": "select",
+          "id": "images_position",
+          "label": "t:sections.header.blocks.mega_menu.images_position",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:global.position.left"
+            },
+            {
+              "value": "right",
+              "label": "t:global.position.right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.header.blocks.mega_menu.image_1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "t:global.image.image",
+          "info": "t:sections.header.blocks.mega_menu.image_size_recommendation"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "image_1_heading",
+          "label": "t:global.text.heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "image_1_text",
+          "label": "t:global.text.text"
+        },
+        {
+          "type": "url",
+          "id": "image_1_link",
+          "label": "t:global.text.link"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.header.blocks.mega_menu.image_2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "t:global.image.image",
+          "info": "t:sections.header.blocks.mega_menu.image_size_recommendation"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "image_2_heading",
+          "label": "t:global.text.heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "image_2_text",
+          "label": "t:global.text.text"
+        },
+        {
+          "type": "url",
+          "id": "image_2_link",
+          "label": "t:global.text.link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
